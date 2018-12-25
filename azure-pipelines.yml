@@ -40,7 +40,7 @@ jobs:
       projects: '**/*Tests/*.csproj'
       arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
   - script: dotnet pack -o $(Build.ArtifactStagingDirectory)/packages /p:PackageVersion=$(Major).$(Minor).$(Patch)-beta --configuration $(buildConfiguration)
-    displayName: 'dotnet pack staging'
+    displayName: 'dotnet pack beta'
   - script: dotnet pack -o $(Build.ArtifactStagingDirectory)/packages/release /p:PackageVersion=$(Major).$(Minor).$(Patch) --configuration $(buildConfiguration)
     displayName: 'dotnet pack release'
   - task: PublishBuildArtifacts@1
