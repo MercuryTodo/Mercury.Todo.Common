@@ -16,6 +16,7 @@
     <PackageReference Include="MassTransit" Version="5.1.5" />
     <PackageReference Include="MassTransit.Autofac" Version="5.1.5" />
     <PackageReference Include="MassTransit.RabbitMQ" Version="5.1.5" />
+    <PackageReference Include="Mercury.Todo.Messages" Version="0.0.128-beta" />
     <PackageReference Include="Nancy" Version="2.0.0-clinteastwood" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.1.4" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.1.1" />
@@ -45,10 +46,6 @@
 
   <ItemGroup>
     <Folder Include="Files\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Messages\src\Messages\Messages.csproj" />
   </ItemGroup>
 
 </Project>
