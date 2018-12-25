@@ -1,0 +1,50 @@
+trigger:
+- master
+
+variables:
+  buildConfiguration: 'Release'
+  Major: '0'
+  Minor: '0'
+  patch: $[counter('versioncounter', 100)]
+
+jobs:
+- job: 'Ubuntu'
+  pool:
+    vmImage: 'Ubuntu-16.04'
+
+  steps:
+  - script: dotnet restore
+    displayName: 'dotnet restore'
+  - script: dotnet build
+    displayName: 'dotnet build'
+  - task: DotNetCoreCLI@2
+    displayName: 'Dotnet test'
+    inputs:
+      command: test
+      projects: '**/*Tests/*.csproj'
+      arguments: '--configuration $(buildConfiguration)'
+
+- job: 'Windows'
+  pool:
+    vmImage: 'VS2017-Win2016'
+
+  steps:
+  - script: dotnet restore
+    displayName: 'dotnet restore'
+  - script: dotnet build --configuration $(buildConfiguration)
+    displayName: 'dotnet build'
+  - task: DotNetCoreCLI@2
+    displayName: 'dotnet test'
+    inputs:
+      command: test
+      projects: '**/*Tests/*.csproj'
+      arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
+  - script: dotnet pack -o $(Build.ArtifactStagingDirectory)/packages /p:PackageVersion=$(Major).$(Minor).$(Patch)-beta --configuration $(buildConfiguration)
+    displayName: 'dotnet pack staging'
+  - script: dotnet pack -o $(Build.ArtifactStagingDirectory)/packages/release /p:PackageVersion=$(Major).$(Minor).$(Patch) --configuration $(buildConfiguration)
+    displayName: 'dotnet pack release'
+  - task: PublishBuildArtifacts@1
+    displayName: publish artifacts
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
