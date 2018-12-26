@@ -5,7 +5,7 @@ namespace Common
     public abstract class CustomException : Exception
     {
         public string Code { get; }
-
+xxxxxxxxxx
         protected CustomException()
         {
         }
